@@ -10,32 +10,104 @@
     <script src="libs/jquery/jquery-1.11.3.min.js"></script>
     <script src="libs/uikit/js/uikit.min.js"></script>
     <style type="text/css">
-    div#left {background-color:#ffffff; height:700px; width:400px; float:left;}
+    div#left {background-color:#ffffff; height:700px; width:380px; float:left;}
     div#line {background-color:#000000; height:700px; width:1px; float:left;}
     div#right {background-color:#ffffff; height:700px; width:700px; float:left;}
     </style>
 </head>
 <body  >
-    <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-        <div id="left" class="btn-group pull-right" role="group">
-           <ul class="uk-list uk-list-line">
-            <li>item1</li>
-            <li>item2</li>
-            <li>item3</li>
-        </ul>
-    </div>
-    <div id = "line"></div>
-    <div id = "right">
-        <nav class="uk-navbar uk-margin-large-bottom">
-             
-            <ul class="uk-navbar-nav uk-hidden-small">
 
-                <li><a href="responder.html">AutoResponder</a></li>
-                <li><a href="decrypt.html">Decrypt</a></li>
-            </ul>
-        </nav>
-        <p>decrypt</p>
+    <!--整体布局-->
+    <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
+
+        <!--左边栏-->
+        <div id="left" class="uk-margin-right uk-overflow-container" role="group">
+            <!--网络请求表格-->
+            <table class="uk-table uk-table-hover" style="width:180%">
+
+                <!--表格头-->
+                <thead>
+                    <tr>
+                        <th class="uk-width-1-10">Result</th>
+                        <th class="uk-width-3-10">Host</th>
+                        <th class="uk-width-3-10">Url</th>
+                        <th class="uk-width-1-10">Body</th>
+                        <th class="uk-width-2-10">Content-Type</th>
+                    </tr>
+                </thead>
+
+                <!--表格body-->
+                <tbody>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>baidu.com</td>
+                        <td>/stat/access</td>
+                        <td>582</td>
+                        <td>txt/html</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!--中间竖线-->
+        <div id = "line"></div>
+
+        <!--右边整体布局-->
+        <div id = "right" class="uk-margin-left">
+
+            <!--导航栏-->
+            <nav class="uk-navbar uk-margin-bottom">
+                <ul class="uk-navbar-nav uk-hidden-small">
+                    <li class="uk-active">
+                        <a href="responder.html">AutoResponder</a>
+                    </li>
+                    <li>
+                        <a href="decrypt.html">Decrypt</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <p>decrypt</p>
+
+                
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>
