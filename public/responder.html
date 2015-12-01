@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="libs/uikit/css/uikit.min.css" />
     <script src="libs/jquery/jquery-1.11.3.min.js"></script>
     <script src="libs/uikit/js/uikit.min.js"></script>
+    <script src="scripts/responder.js"></script>
     <style type="text/css">
     div#left {background-color:#ffffff; height:700px; width:380px; float:left;}
     div#line {background-color:#000000; height:700px; width:1px; float:left;}
     div#right {background-color:#ffffff; height:700px; width:700px; float:left;}
     </style>
+    
 </head>
 <body  >
 
@@ -228,15 +230,15 @@
                         <!--表格body-->
                         <tbody>
                             <tr>
-                                <td class="uk-width-7-10"><input class="uk-width-1-1" type="text" placeholder=""></td>
+                                <td class="uk-width-7-10"><input class="uk-width-1-1" id="source-request" type="text" placeholder="request" ></td>
                                 <td class="uk-width-1-10"><select>
                                     <option>header</option>
                                     <option>body</option>
                                 </select></td>
-                                <td class="uk-width-2-10"><button class="uk-button uk-width-1-1">save</button></td>
+                                <td class="uk-width-2-10"><button class="uk-button uk-width-1-1" onclick="saveclick()">save</button></td>
                             </tr>
                             <tr>
-                                <td><input class="uk-width-1-1" type="text" placeholder=""></td>
+                                <td><input class="uk-width-1-1" type="text" id="turn-to" placeholder="turn to"></td>
                                 <td><select>
                                     <option>header</option>
                                     <option>body</option>
