@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Charles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    
+    <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="libs/uikit/css/uikit.min.css" />
+    <script src="libs/jquery/jquery-1.11.3.min.js"></script>
+    <script src="libs/uikit/js/uikit.min.js"></script>
+    <style type="text/css">
+    div#left {background-color:#ffffff; height:700px; width:380px; float:left;}
+    div#line {background-color:#000000; height:700px; width:1px; float:left;}
+    div#right {background-color:#ffffff; height:700px; width:700px; float:left;}
+    </style>
+
+    <script  type="text/template" id="inspectors-tmp">
+    <div style="width:700px;height:660px">
+
+    <!--请求信息-->
+    <div style="width:100%;height:50%">
+    <!--请求功能导航-->
+    <ul class="uk-tab" data-uk-tab>
+    <li class="uk-active"><a href="">Headers</a></li>
+    <li><a href="">TextView</a></li>
+    <li><a href="">Json</a></li>
+    </ul>
+    </div>
+
+    <!--返回信息-->
+    <div style="width:100%; height:50%">
+    <!--请求功能导航-->
+    <ul class="uk-tab" data-uk-tab>
+    <li class="uk-active"><a href="">Headers</a></li>
+    <li><a href="">TextView</a></li>
+    <li><a href="">Json</a></li>
+    </ul>
+    </div>
+
+    </div>
+    </script>
+    <script  type="text/template" id="responder-tmp">
+    <!--转向是否生效checkbox-->
+    <label><input type="checkbox">Enable Rules</label>
+
+    <!--放置button布局-->
+    <div class="uk-margin-top uk-margin-bottom">
+    <!--button-->
+    <button class="uk-button">Add Rule</button>
+    </div>
+
+    <!--放置转向表格布局-->
+    <div class="uk-scrollable-box" style="height:480px">
+
+    <!--表格-->
+    <table class="uk-table uk-table-hover">
+
+    <!--表格头-->
+    <thead>
+    <tr>
+    <th>matches</th>
+    <th>respond</th>
+    </tr>
+    </thead>
+
+    <!--表格body-->
+    <tbody>
+    <tr>
+                <td><label><input type="checkbox">http://www.baidu.com</label></td>
+                <td><label>no response</label></td>
+                </tr>
+                <tr>
+                <td><label><input type="checkbox">http://www.sina.com</label></td>
+                <td><label>no response</label></td>
+                </tr>
+                <tr>
+                <td><label><input type="checkbox">http://www.souhu.com</label></td>
+                <td><label>no response</label></td>
+                </tr>
+                <tr>
+                <td><label><input type="checkbox">http://www.baidu.com</label></td>
+                <td><label>no response</label></td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+
+                <!--下边设置转向布局-->
+                <div>
+
+                <!--功能描述-->
+                <lable>Rule Editor</lable>
+
+                <!--转向设置表格布局-->
+                <div>
+                <!--转向设置表格-->
+                <table class="uk-table ">
+
+
+                <!--表格body-->
+                <tbody>
+                <tr>
+                <td class="uk-width-7-10"><input class="uk-width-1-1" id="source-request" type="text" placeholder="request" ></td>
+                <td class="uk-width-1-10"><select>
+                <option>header</option>
+                <option>body</option>
+                </select></td>
+                <td class="uk-width-2-10"><button class="uk-button uk-width-1-1" onclick="saveclick()">save</button></td>
+                </tr>
+                <tr>
+                <td><input class="uk-width-1-1" type="text" id="turn-to" placeholder="turn to"></td>
+                <td><select>
+                <option>header</option>
+                <option>body</option>
+                </select></td>
+                <td><label><input type="checkbox">Only once</label></td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                </div>
+                </script>
+                <script src="scripts/control.js"></script>
+
+            </head>
+            <body  >
+
+                <!--整体布局-->
+                <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
+
+                    <!--左边栏-->
+                    <div id="left" class="uk-margin-right uk-overflow-container" role="group">
+                        <!--网络请求表格-->
+                        <table class="uk-table uk-table-hover" style="width:180%">
+
+                            <!--表格头-->
+                            <thead>
+                                <tr>
+                                    <th class="uk-width-1-10">Result</th>
+                                    <th class="uk-width-3-10">Host</th>
+                                    <th class="uk-width-3-10">Url</th>
+                                    <th class="uk-width-1-10">Body</th>
+                                    <th class="uk-width-2-10">Content-Type</th>
+                                </tr>
+                            </thead>
+
+                            <!--表格body-->
+                            <tbody>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+                                <tr>
+                                    <td>200</td>
+                                    <td>baidu.com</td>
+                                    <td>/stat/access</td>
+                                    <td>582</td>
+                                    <td>txt/html</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--中间竖线-->
+                    <div id = "line"></div>
+
+                    <!--右边整体布局-->
+                    <div id = "right" class="uk-margin-left">
+
+                        <!--导航栏-->
+                        <nav class="uk-navbar uk-margin-bottom">
+                            <ul class="uk-navbar-nav uk-hidden-small">
+                                <li id="insectors_tab" class="uk-active" >
+                                    <a  onclick="inspectors_checked()">Inspectors</a>
+                                </li>
+                                <li id="autoresponder_tab" >
+                                    <a onclick="responder_checked()">AutoResponder</a>
+                                </li>
+
+                            </ul>
+                        </nav>
+
+                        <div id="right-content">
+                            <div style="width:700px;height:660px">
+
+                               <!--请求信息-->
+                               <div style="width:100%;height:50%">
+                                 <!--请求功能导航-->
+                                 <ul class="uk-tab" data-uk-tab>
+                                   <li class="uk-active"><a href="">Headers</a></li>
+                                   <li><a href="">TextView</a></li>
+                                   <li><a href="">Json</a></li>
+                               </ul>
+                           </div>
+
+                           <!--返回信息-->
+                           <div style="width:100%; height:50%">
+                            <!--请求功能导航-->
+                            <ul class="uk-tab" data-uk-tab>
+                              <li class="uk-active"><a href="">Headers</a></li>
+                              <li><a href="">TextView</a></li>
+                              <li><a href="">Json</a></li>
+                          </ul>
+                      </div>
+
+                  </div>
+              </div>
+
+
+          </div>
+      </div>
+  </div>
+</body>
+</html>
