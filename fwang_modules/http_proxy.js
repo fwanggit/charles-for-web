@@ -24,7 +24,7 @@ var proxy = http.createServer(function (req, res) {
 	    };
 		 
 	    var client = http.request(options,function(_res) {
-			console.log("-------http.request\n"+_res.url);
+			console.log("-------http.request\n"+req.url);
 			//console.log((_res.headers));
 			res.writeHead(_res.statusCode, _res.headers);
 			//_res.setEncoding('utf8');
