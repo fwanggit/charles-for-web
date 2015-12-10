@@ -1,6 +1,4 @@
 var express = require('express');
-var http_proxy = require('../fwang_modules/http_proxy');
-
 var router = express.Router();
 
 /* GET home page. */
