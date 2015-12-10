@@ -4,7 +4,9 @@
 <!--放置button布局-->
 <div class="uk-margin-top uk-margin-bottom">
     <!--button-->
-    <button class="uk-button">Add Rule</button>
+    <button class="uk-button" onclick="responder_add()">Add Rule</button>
+    <button class="uk-button" onclick="responder_delete()">Delete</button>
+    <button class="uk-button" onclick="responder_clear()">Clear</button>
 </div>
 
 <!--放置转向表格布局-->
@@ -23,89 +25,11 @@
         </thead>
 
         <!--表格body-->
-        <tbody>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.sina.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.souhu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.sina.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.souhu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.sina.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.souhu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.sina.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.souhu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.sina.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.souhu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-            <tr>
-                <td><label><input type="checkbox">http://www.baidu.com</label></td>
-                <td><label>no response</label></td>
-            </tr>
-        </tbody>
+        <tbody id="responder-msg">
+
+       </tbody>
     </table>
+
 </div>
 
 <!--下边设置转向布局-->

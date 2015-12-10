@@ -3,6 +3,7 @@
 var source_request_url;
 var turn_to_url;
 
+var responder_list=[];
 
 
 function saveclick(){
@@ -15,13 +16,18 @@ function saveclick(){
 function inspectors_checked(){
 	document.getElementById("autoresponder_tab").className="";
 	document.getElementById("insectors_tab").className="uk-active";
-	loadHTMLDoc('inspectors.html','right-content');
+	loadHTMLDoc('inspectors.html','right-content', function () {
+
+	});
 }
 
 function responder_checked(){
 	document.getElementById("autoresponder_tab").className="uk-active";
 	document.getElementById("insectors_tab").className="";
-	loadHTMLDoc('responder.html','right-content');
+	loadHTMLDoc('responder.html','right-content', function () {
+		responder_refresh();
+	});
+
 }
 
 function request_text_tab_click(){
@@ -62,10 +68,52 @@ function response_json_tab_click(){
 	document.getElementById("response-msg-text-tab").className="";
 }
 
-function loadHTMLDoc(url,id)
+function responder_add(){
+	var responder = {"id":0,"check":false,"request":"StringToMatch","turnto":""};
+	responder_list[responder_list.length]=responder;
+	responder_refresh()
+}
+
+function responder_refresh(){
+	var content = "";
+	for(i=0;i<responder_list.length;i++){
+		responder_list[i].id=
+		content+="<tr ><td><label><input type=\"checkbox\"  id='"+responder_list[i].id+"' onclick=\"responder_list_click("+i+",'"+responder_list[i].id+"')\">"+responder_list[i].request+"</label></td><td><label>"+responder_list[i].turnto+"</label></td> </tr>";
+console.log(responder_list[i].id);
+	}
+	document.getElementById('responder-msg').innerHTML=content;
+	for(i=0;i<responder_list.length;i++){
+		document.getElementById(responder_list[i].id).checked = responder_list[i].check;
+	}
+}
+
+function responder_list_click(position,id){
+	responder_list[position].check = document.getElementById(id).checked;
+}
+
+function responder_clear(){
+	responder_list=[];
+	responder_refresh()
+}
+
+function responder_delete(){
+var tmp=[];
+	for(i=0;i<responder_list.length;i++){
+
+if(!document.getElementById(responder_list[i].id).checked){
+	tmp.push(responder_list[i]);
+}
+	}
+	responder_list=tmp;
+	responder_refresh()
+
+}
+
+
+
+function loadHTMLDoc(url,id,end)
 {
 	var xmlhttp;
-	var txt,x,xx,i;
 	if (window.XMLHttpRequest)
   {// code for IE7+, Firefox, Chrome, Opera, Safari
   	xmlhttp=new XMLHttpRequest();
@@ -79,7 +127,7 @@ function loadHTMLDoc(url,id)
   	if (xmlhttp.readyState==4 && xmlhttp.status==200)
   	{
   		document.getElementById(id).innerHTML=xmlhttp.responseText;
-  		
+  		end();
   		
   	}
   }
