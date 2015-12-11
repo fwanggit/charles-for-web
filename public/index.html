@@ -14,8 +14,9 @@
     div#line {background-color:#000000; height:700px; width:1px; float:left;}
     div#right {background-color:#ffffff; height:700px; width:700px; float:left;}
     </style>
-    <script src="scripts/control.js"></script>
-
+    <script src="scripts/index.js"></script>
+    <script src="scripts/responder.js"></script>
+    <script src="scripts/requestlist.js"></script>
 </head>
 <body  >
 
@@ -25,10 +26,11 @@
         <!--左边栏-->
         <div id="left" class="uk-margin-right uk-overflow-container" role="group">
             <!--网络请求列表-->
-            <ul class="uk-list">
-                <li style="background: #bbbbbb;height: 30px;vertical-align: middle ; " >fdzgfdszkfdsfksdkfsdkfsfksdkfsdfksdkfsad</li>
-                <li>fdzgfdszkfdsfksdkfsdkfsfksdkfsdfksdkfsad</li>
-                <li>fdzgfdszkfdsfksdkfsdkfsfksdkfsdfksdkfsad</li>
+            <ul class="uk-list  uk-list-line uk-list-space" style="margin-top: 5px" id="request_list" >
+
+                <li style="font-size:18px;margin-left: 10px" > <b>www.baidu.com</b></li>
+                <li style="font-size:18px;margin-left: 10px" > <b>www.sina.com</b></li>
+                <li style="font-size:18px;margin-left: 10px" > <b>www.google.com</b></li>
 
             </ul>
 
