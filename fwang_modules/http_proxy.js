@@ -7,6 +7,9 @@ var cluster = require('cluster');
 var VERSION = 'fwang Proxy 1.0'
 var HTTPVER = 'HTTP/1.1'
 var PORT = 8888
+ hook_request = null
+ hook_respond = null
+ tag = 0
 // Create an HTTP tunneling proxy
 function connectionHandler(req, res) {
 	console.log("-------connectionHandler\n"+req.method+" "+req.url);
@@ -16,6 +19,7 @@ function connectionHandler(req, res) {
 	{
 		clientURL.port=80;
 	}
+	hook_request(++tag,req.method,req.url,req.headers,null)
 	//console.log(req.url);
     var options = {
 		port:clientURL.port,
@@ -25,12 +29,13 @@ function connectionHandler(req, res) {
 		headers:req.headers
     };
     var client = http.request(options,function(_res) {
-		console.log("-------http.request\n"+req.url);
-		//console.log((_res.headers));
+		//console.log("-------http.request\n"+req.url);
+		hook_respond(tag,_res.statusCode, _res.headers,null)
 		res.writeHead(_res.statusCode, _res.headers);
 		//_res.setEncoding('utf8');
 		_res.on('data', function (chunk) {
-		    console.log('BODY: ');
+		    //console.log('BODY: ');
+			chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
 			res.write(chunk);
 		  });
 		_res.on('end', function () {
@@ -38,8 +43,8 @@ function connectionHandler(req, res) {
 		});
     });
 	req.on('data', function (chunk) {
+		chunk=hook_request(tag,req.method,req.url,req.headers,chunk)
 		client.write(chunk);
-		console.log('chunk: '+chunk);
 	});
 	client.end();
 	client.on('error', function (e) {
@@ -61,7 +66,11 @@ function connectionHandler(req, res) {
       });
     });
 };
-exports.start_server = function (_port,isCluster) {
+exports.start_server = function (_port,isCluster,_hook_request,_hook_respond) {
+	
+	_port = arguments[0] ? arguments[0] : PORT;
+	hook_request = arguments[2] ? arguments[2] : null;
+	hook_respond = arguments[3] ? arguments[3] : null;
 	if (cluster.isMaster && isCluster) {
 		var numCPUs = require('os').cpus().length;
 	    for (var i = 0; i < numCPUs; i++) {
@@ -73,10 +82,6 @@ exports.start_server = function (_port,isCluster) {
 	}
 	else
 	{
-		if (typeof(_port) == undefined || _port==null)
-		{
-			_port=PORT;
-		}
 	   // Workers can share any TCP connection
 	   // In this case it is an HTTP server
 		http.createServer(connectionHandler).listen(_port,function() {

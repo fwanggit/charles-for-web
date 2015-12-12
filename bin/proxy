@@ -1,3 +1,4 @@
 #!/usr/bin/env node
+var charles=require("../proxy/charles")
 var http_proxy = require('../fwang_modules/http_proxy');
-http_proxy.start_server(8888,true);
+http_proxy.start_server(8888,false,charles.hook_request,charles.hook_respond);
