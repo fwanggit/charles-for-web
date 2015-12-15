@@ -10,7 +10,6 @@ var HTTPVER = 'HTTP/1.1'
 var PORT = 8888
  hook_request = null
  hook_respond = null
- tag = 0
 // Create an HTTP tunneling proxy
 function connectionHandler(req, res) {
 	console.log("-------connectionHandler\n"+req.method+" "+req.url);
@@ -69,7 +68,7 @@ function connectionHandler(req, res) {
     });
 };
 exports.start_server = function (_port,isCluster,_hook_request,_hook_respond) {
-	
+
 	_port = arguments[0] ? arguments[0] : PORT;
 	hook_request = arguments[2] ? arguments[2] : null;
 	hook_respond = arguments[3] ? arguments[3] : null;
