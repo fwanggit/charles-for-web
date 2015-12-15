@@ -8,7 +8,8 @@ var requestlist=[];
 var host=-1;
 var url=-1
 
-
+var inspector_request = 0;
+var inspector_response = 0;
 
 
 
@@ -16,7 +17,8 @@ function inspectors_checked(end){
 	document.getElementById("autoresponder_tab").className="";
 	document.getElementById("insectors_tab").className="uk-active";
 	loadHTMLDoc('inspectors.html','right-content', function () {
-end()
+		if(end){end()}
+
 	});
 }
 
@@ -24,13 +26,14 @@ function responder_checked(end){
 	document.getElementById("autoresponder_tab").className="uk-active";
 	document.getElementById("insectors_tab").className="";
 	loadHTMLDoc('responder.html','right-content', function () {
-		responder_refresh();
-		end()
+		responder_refresh()
+		if(end){end()}
 	});
 
 }
 
 function request_text_tab_click(){
+	inspector_request = 1;
 	document.getElementById("request-msg-text-tab").className="uk-active";
 	document.getElementById("request-msg-json-tab").className="";
 	document.getElementById("request-msg-headers-tab").className="";
@@ -41,6 +44,7 @@ if(host!=-1&&url!=-1){
 }
 
 function request_json_tab_click(){
+	inspector_request = 2;
 	document.getElementById("request-msg-text-tab").className="";
 	document.getElementById("request-msg-json-tab").className="uk-active";
 	document.getElementById("request-msg-headers-tab").className="";
@@ -51,6 +55,7 @@ function request_json_tab_click(){
 }
 
 function request_headers_tab_click(){
+	inspector_request = 0;
 	document.getElementById("request-msg-text-tab").className="";
 	document.getElementById("request-msg-json-tab").className="";
 	document.getElementById("request-msg-headers-tab").className="uk-active";
@@ -61,6 +66,7 @@ function request_headers_tab_click(){
 }
 
 function response_headers_tab_click(){
+	inspector_response=0;
 	document.getElementById("response-msg-headers-tab").className="uk-active";
 	document.getElementById("response-msg-json-tab").className="";
 	document.getElementById("response-msg-text-tab").className="";
@@ -73,6 +79,7 @@ function response_headers_tab_click(){
 }
 
 function response_text_tab_click(){
+	inspector_response=1;
 	document.getElementById("response-msg-headers-tab").className="";
 	document.getElementById("response-msg-json-tab").className="";
 	document.getElementById("response-msg-text-tab").className="uk-active";
@@ -83,6 +90,7 @@ function response_text_tab_click(){
 }
 
 function response_json_tab_click(){
+	inspector_response=2;
 	document.getElementById("response-msg-headers-tab").className="";
 	document.getElementById("response-msg-json-tab").className="uk-active";
 	document.getElementById("response-msg-text-tab").className="";
@@ -164,17 +172,40 @@ function hostclick(postion){
 function urlclick(host,postion){
 	this.host = host;
 url=postion;
-	inspectors_checked(function end(){
-		request_headers_tab_click()
-		response_headers_tab_click
-		document.getElementById('request-msg-panel').innerHTML= requestlist[host].netmsgs[postion].requestHeader;
-		document.getElementById('response-msg-panel').innerHTML=requestlist[host].netmsgs[postion].responseHeader;
+	inspectors_checked(function (){
+	switch (inspector_request){
+				case 0:
+						request_headers_tab_click();
+					break;
+				case 1:
+					request_text_tab_click();
+					break;
+				case 2:
+						request_json_tab_click()
+					break;
+
+			}
+			switch (inspector_response){
+				case 0:
+						response_headers_tab_click()
+					break;
+				case 1:
+						response_text_tab_click()
+					break;
+				case 2:
+						response_json_tab_click()
+					break;
+			}
+	});
+
+
+
 
 
 		//点击一条信息,改变背景色
 			//document.getElementById('request_list__'+host+"_"+postion).style.backgroundColor="#6495ED";
 
-	});
+
 
 }
 
@@ -189,5 +220,4 @@ function listrefresh(){
 		}
 	}
 	document.getElementById('request_list').innerHTML=content;
-	console.log(content)
 }

@@ -19,7 +19,10 @@ function connectionHandler(req, res) {
 	{
 		clientURL.port=80;
 	}
-	hook_request(++tag,req.method,req.url,req.headers,null)
+
+		hook_request(++tag,req.method,req.url,req.headers,null)
+
+
 	//console.log(req.url);
     var options = {
 		port:clientURL.port,
@@ -67,7 +70,7 @@ function connectionHandler(req, res) {
     });
 };
 exports.start_server = function (_port,isCluster,_hook_request,_hook_respond) {
-	
+
 	_port = arguments[0] ? arguments[0] : PORT;
 	hook_request = arguments[2] ? arguments[2] : null;
 	hook_respond = arguments[3] ? arguments[3] : null;
