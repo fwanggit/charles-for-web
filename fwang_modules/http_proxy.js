@@ -3,6 +3,7 @@ var http = require('http');
 var url = require('url');
 var child_process=require('child_process');
 var cluster = require('cluster');
+var uuid = require('node-uuid');
 
 var VERSION = 'fwang Proxy 1.0'
 var HTTPVER = 'HTTP/1.1'
@@ -19,7 +20,8 @@ function connectionHandler(req, res) {
 	{
 		clientURL.port=80;
 	}
-	hook_request(++tag,req.method,req.url,req.headers,null)
+	var tag=uuid.v1();
+	hook_request(tag,req.method,req.url,req.headers,null)
 	//console.log(req.url);
     var options = {
 		port:clientURL.port,
