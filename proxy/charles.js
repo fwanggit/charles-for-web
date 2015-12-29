@@ -1,13 +1,21 @@
 
-//var redis = require("redis"),
-  //  client = redis.createClient();
-	
+var redis = require('redis'); 
+var client =redis.createClient({ "host": "127.0.0.1", "port": "6379" });
 
 exports.hook_request = function (tag,method,url,headers,chunk) {
 	console.log(tag+","+url+','+headers)
-	//client.on("error", function (err) {
-	   // console.log("Error " + err);
-	//});
+   
+	client.on("error", function (err) {
+	   console.log("Error " + err);
+	});
+	client.hgetall(tag, function(err, reply) {
+		if(reply==null){
+		    client.hmset(tag,"method",method,"url",url,"headers",headers,"chunk",chunk);
+		}
+		reply.chunk+=chunk
+        console.log(reply); //打印'string'
+    });
+    
 /*
 	client.set("string key", "string val", redis.print);
 	client.hset("hash key", "hashtest 1", "some value", redis.print);
