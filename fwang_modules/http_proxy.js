@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var net = require('net');
 var http = require('http');
 var url = require('url');
@@ -8,19 +9,22 @@ var uuid = require('node-uuid');
 var VERSION = 'fwang Proxy 1.0'
 var HTTPVER = 'HTTP/1.1'
 var PORT = 8888
- hook_request = null
- hook_respond = null
+var hook_request = null
+var hook_respond = null
 // Create an HTTP tunneling proxy
 function connectionHandler(req, res) {
-	console.log("-------connectionHandler\n"+req.method+" "+req.url);
-
+	console.log(req.method+" "+req.url+"\n");
     var clientURL = url.parse(req.url);
 	if (typeof(clientURL.port) == undefined || clientURL.port==null)
 	{
 		clientURL.port=80;
 	}
 	var tag=uuid.v1();
-	hook_request(tag,req.method,req.url,req.headers,null)
+	if(hook_request!=null)
+	{
+		hook_request(tag,req.method,req.url,req.headers,null)
+	}
+	
 	//console.log(req.url);
     var options = {
 		port:clientURL.port,
@@ -31,12 +35,18 @@ function connectionHandler(req, res) {
     };
     var client = http.request(options,function(_res) {
 		//console.log("-------http.request\n"+req.url);
-		hook_respond(tag,_res.statusCode, _res.headers,null)
+		if(hook_respond!=null)
+		{
+			hook_respond(tag,_res.statusCode, _res.headers,null)
+		}
 		res.writeHead(_res.statusCode, _res.headers);
 		//_res.setEncoding('utf8');
 		_res.on('data', function (chunk) {
 		    //console.log('BODY: ');
-			chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
+			if(hook_respond!=null)
+			{
+				chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
+			}
 			res.write(chunk);
 		  });
 		_res.on('end', function () {
@@ -44,7 +54,10 @@ function connectionHandler(req, res) {
 		});
     });
 	req.on('data', function (chunk) {
-		chunk=hook_request(tag,req.method,req.url,req.headers,chunk)
+		if(hook_request!=null)
+		{
+			chunk=hook_request(tag,req.method,req.url,req.headers,chunk)
+		}
 		client.write(chunk);
 	});
 	client.end();
@@ -68,7 +81,7 @@ function connectionHandler(req, res) {
     });
 };
 exports.start_server = function (_port,isCluster,_hook_request,_hook_respond) {
-
+	
 	_port = arguments[0] ? arguments[0] : PORT;
 	hook_request = arguments[2] ? arguments[2] : null;
 	hook_respond = arguments[3] ? arguments[3] : null;

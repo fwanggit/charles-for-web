@@ -1,9 +1,9 @@
-
+#!/usr/bin/env node
 var redis = require('redis'); 
 var client =redis.createClient({ "host": "127.0.0.1", "port": "6379" });
 
 exports.hook_request = function (tag,method,url,headers,chunk) {
-	console.log(tag+","+url+','+headers)
+	console.log("---hook_request:"+tag+","+url)
    
 	client.on("error", function (err) {
 	   console.log("Error " + err);
@@ -12,8 +12,11 @@ exports.hook_request = function (tag,method,url,headers,chunk) {
 		if(reply==null){
 		    client.hmset(tag,"method",method,"url",url,"headers",headers,"chunk",chunk);
 		}
-		reply.chunk+=chunk
-        console.log(reply); //打印'string'
+		else
+		{
+			reply.chunk+=chunk
+			console.log("reply:",reply); //打印'string'
+		}
     });
     
 /*
@@ -28,10 +31,10 @@ exports.hook_request = function (tag,method,url,headers,chunk) {
 	    client.quit();
 	});
 	*/
-	return chunk
-}
+	return chunk;
+};
 exports.hook_respond = function (tag,statusCode,headers,chunk) {
 	console.log(tag+","+statusCode+','+headers)
 	return chunk
-}
+};
 	
