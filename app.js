@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/echo', echo);
-app.use('/echo', require('./proxy/charles'));
+app.use('/charles', require('./proxy/charles'));
 
 
 // catch 404 and forward to error handler

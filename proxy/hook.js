@@ -25,7 +25,7 @@ exports.hook_request = function (tag,method,url,headers,chunk) {
 		}
 		if(chunk!=null)
 		{
-			console.log(tag+"_request_chunk",chunk.toString('hex'));
+			//console.log(tag+"_request_chunk",chunk.toString('hex'));
 			client.append(tag+"_request_chunk",chunk.toString('hex'),function(err, append) {
 				//console.log("append:",append);
 				if(err!=null)
@@ -38,29 +38,6 @@ exports.hook_request = function (tag,method,url,headers,chunk) {
 		
 		
 	})
-    
-	
-	// client.hkeys(tag, function(err, replies) {
-//
-//JSON.stringify
-// 		if(replies==null){
-// 		    client.hset(tag,"method",method,client.print);
-// 			client.hset(tag,"url",url,client.print);
-// 			client.hset(tag,"headers",headers,client.print);
-// 			client.hset(tag,"chunk",chunk,client.print);
-// 			console.log("err:" + err);
-// 		}
-// 		else
-// 		{
-// 		    console.log(replies.length + " replies:");
-// 		    replies.forEach(function (reply, i) {
-// 		        console.log("    " + i + ": " + reply);
-// 		    });
-// 			//reply.chunk+=chunk
-// 	        //console.log("reply:",replies); //打印'string'
-// 		}
-//     });
-    
 /*
 	client.set("string key", "string val", redis.print);
 	client.hset("hash key", "hashtest 1", "some value", redis.print);
@@ -78,23 +55,29 @@ exports.hook_request = function (tag,method,url,headers,chunk) {
 exports.hook_respond = function (tag,statusCode,headers,chunk) {
 	console.log("hook_respond:"+tag+","+statusCode)
 	respond={
-		"respond":{
 			"statusCode":statusCode.toString(),
 	        "headers":JSON.stringify(headers)
-         }
 	 }
 	client.hget("proxy",tag,function(err, replies) {
 		
 		//request=JSON.parse(replies)
 		if(replies==null)
 		{
-			client.hset("proxy",tag,JSON.stringify(request));
 			client.del(tag+"_respond_chunk")
+		}
+		else
+		{
+			connection=JSON.parse(replies);
+			connection.respond=respond
+			client.hset("proxy",tag,JSON.stringify(connection));
+			client.del(tag+"_respond_chunk")
+			//console.log("replies:",connection);
 		}
 		if(chunk!=null)
 		{
-			//console.log("chunk:",typeof(chunk));
-			console.log(tag+"_respond_chunk",chunk.toString('hex'));
+			
+			
+			//console.log(tag+"_respond_chunk",chunk.toString('hex'));
 			client.append(tag+"_respond_chunk",chunk.toString('hex'),function(err, append) {
 				//console.log("append:",append);
 				if(err!=null)
