@@ -9,9 +9,9 @@
 
 ```
 下载，解压，编译:
-$ wget http://download.redis.io/releases/redis-3.0.5.tar.gz
-$ tar xzf redis-3.0.5.tar.gz
-$ cd redis-3.0.5
+$ wget http://download.redis.io/releases/redis-3.0.6.tar.gz
+$ tar xzf redis-3.0.6.tar.gz
+$ cd redis-3.0.6
 $ make
 二进制文件是编译完成后在src目录下. 运行如下:
 $ src/redis-server
