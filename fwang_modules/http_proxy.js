@@ -11,6 +11,7 @@ var HTTPVER = 'HTTP/1.1'
 var PORT = 8888
 var hook_request = null
 var hook_respond = null
+var tag=10000//uuid.v1();
 // Create an HTTP tunneling proxy
 function connectionHandler(req, res) {
 	console.log(req.method+" "+req.url+"\n");
@@ -19,7 +20,7 @@ function connectionHandler(req, res) {
 	{
 		clientURL.port=80;
 	}
-	var tag=uuid.v1();
+	tag++
 	if(hook_request!=null)
 	{
 		hook_request(tag,req.method,req.url,req.headers,null)
@@ -41,24 +42,37 @@ function connectionHandler(req, res) {
 		}
 		res.writeHead(_res.statusCode, _res.headers);
 		//_res.setEncoding('utf8');
+		//chunks=[]
 		_res.on('data', function (chunk) {
-		    //console.log('BODY: ');
-			if(hook_respond!=null)
-			{
-				chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
-			}
-			res.write(chunk);
+		    res.write(chunk);
+			//chunks.push(chunk)
+ 			if(hook_respond!=null)
+ 			{
+ 				chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
+ 			}
+			
 		  });
 		_res.on('end', function () {
-		     res.end();
+		   //   console.log('hook_respond(chunks): ',Buffer.concat(chunks));
+			//res.write(chunk);
+			res.end();
 		});
     });
+	//_chunks=[]
+	req.on('end', function () {
+		// console.log('hook_respond(chunks): ',Buffer.concat(_chunks));
+		
+		//client.write(chunk);
+	});
 	req.on('data', function (chunk) {
+		//console.log('chunk: ',chunk.toString());
+		client.write(chunk);
 		if(hook_request!=null)
 		{
 			chunk=hook_request(tag,req.method,req.url,req.headers,chunk)
 		}
-		client.write(chunk);
+		//chunks.push(chunk)
+		
 	});
 	client.end();
 	client.on('error', function (e) {

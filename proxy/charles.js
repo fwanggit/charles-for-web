@@ -1,40 +1,41 @@
 #!/usr/bin/env node
-var redis = require('redis'); 
-var client =redis.createClient({ "host": "127.0.0.1", "port": "6379" });
+var express = require('express');
+var router = express.Router();
 
-exports.hook_request = function (tag,method,url,headers,chunk) {
-	console.log("---hook_request:"+tag+","+url)
-   
-	client.on("error", function (err) {
-	   console.log("Error " + err);
-	});
-	client.hgetall(tag, function(err, reply) {
-		if(reply==null){
-		    client.hmset(tag,"method",method,"url",url,"headers",headers,"chunk",chunk);
-		}
-		else
+var redis = require('redis'); 
+
+/* echo server*/
+lists=function(req, res){
+	var _list=[]
+	var client =redis.createClient({ "host": "127.0.0.1", "port": "6379" });
+	client.hkeys("proxy", function(err, replies) {
+		if(replies==null || replies.length==0)
 		{
-			reply.chunk+=chunk
-			console.log("reply:",reply); //打印'string'
+			client.quit()
+			res.send("{}")
 		}
-    });
-    
-/*
-	client.set("string key", "string val", redis.print);
-	client.hset("hash key", "hashtest 1", "some value", redis.print);
-	client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
-	client.hkeys("hash key", function (err, replies) {
-	    console.log(replies.length + " replies:");
-	    replies.forEach(function (reply, i) {
-	        console.log("    " + i + ": " + reply);
-	    });
-	    client.quit();
-	});
-	*/
-	return chunk;
-};
-exports.hook_respond = function (tag,statusCode,headers,chunk) {
-	console.log(tag+","+statusCode+','+headers)
-	return chunk
-};
-	
+		
+		replies.forEach(function (tag, i) {
+		   
+			
+			client.hget("proxy",tag,function (err, _request) {
+				console.log("    " + i + ": " + tag);
+				_list.push("{"+tag+":"+_request+"}")
+				if(i==replies.length-1)
+				{
+					res.send(JSON.stringify(_list))
+					client.quit()
+				}
+			})
+	     });
+		 
+	 });
+}
+
+router.get('/lists', function(req, res, next) {
+    lists(req, res);
+});
+router.post('/lists', function(req, res, next) {
+    lists(req, res);
+});
+module.exports = router;
