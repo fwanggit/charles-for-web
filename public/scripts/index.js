@@ -11,7 +11,30 @@ var url=-1
 var inspector_request = 0;
 var inspector_response = 0;
 
+function start_requsst(){
+	setInterval('request_netlist()',1000);
+}
 
+function request_netlist(){
+	$.ajax({
+		url: '/charles/lists',
+		type: 'get',
+		async: false,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(data){
+			if(200 === data.code) {
+				console.log("200")
+			} else {
+				console.log("not 200")
+			}
+		},
+		error: function(){
+			console.log("error")
+		}
+	});
+}
 
 function inspectors_checked(end){
 	document.getElementById("autoresponder_tab").className="";
