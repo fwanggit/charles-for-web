@@ -27,8 +27,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/echo', echo);
 app.use('/charles', require('./proxy/charles'));
-
-
+//app.use('/whiteboard', require('./routes/whiteboard'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
