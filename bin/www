@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4000');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -20,8 +20,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
-io.on('connection', require('../routes/whiteboard').whiteboard);
+
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -29,8 +28,13 @@ io.on('connection', require('../routes/whiteboard').whiteboard);
 server.listen(port,"0.0.0.0");
 server.on('error', onError);
 server.on('listening', onListening);
-//启动 http 代理服务器
+var online=require('../routes/online')
+online.bind(server)
 
+//启动 http 代理服务器
+var http_proxy = require('../fwang_modules/http_proxy');
+var charles=require("../proxy/hook")
+var server=http_proxy.start_server(8888,false,charles.hook_request,charles.hook_respond)
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -88,5 +92,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }

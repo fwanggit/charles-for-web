@@ -4,7 +4,7 @@ var http = require('http');
 var url = require('url');
 var child_process=require('child_process');
 var cluster = require('cluster');
-var uuid = require('node-uuid');
+//var uuid = require('node-uuid');
 
 var VERSION = 'fwang Proxy 1.0'
 var HTTPVER = 'HTTP/1.1'
@@ -14,7 +14,9 @@ var hook_respond = null
 var tag=10000//uuid.v1();
 // Create an HTTP tunneling proxy
 function connectionHandler(req, res) {
-	console.log(req.method+" "+req.url+"\n");
+	
+	var ip=req.connection.remoteAddress.split(':').pop()
+	console.log(req.method+" "+req.url+'<--'+ip+"\n");
     var clientURL = url.parse(req.url);
 	if (typeof(clientURL.port) == undefined || clientURL.port==null)
 	{
@@ -23,7 +25,7 @@ function connectionHandler(req, res) {
 	tag++
 	if(hook_request!=null)
 	{
-		hook_request(tag,req.method,req.url,req.headers,null)
+		hook_request(ip,tag,req.method,req.url,req.headers,null)
 	}
 	
 	//console.log(req.url);
@@ -38,7 +40,7 @@ function connectionHandler(req, res) {
 		//console.log("-------http.request\n"+req.url);
 		if(hook_respond!=null)
 		{
-			hook_respond(tag,_res.statusCode, _res.headers,null)
+			hook_respond(ip,tag,_res.statusCode, _res.headers,null)
 		}
 		res.writeHead(_res.statusCode, _res.headers);
 		//_res.setEncoding('utf8');
@@ -48,7 +50,7 @@ function connectionHandler(req, res) {
 			//chunks.push(chunk)
  			if(hook_respond!=null)
  			{
- 				chunk=hook_respond(tag,_res.statusCode, _res.headers,chunk)
+ 				chunk=hook_respond(ip,tag,_res.statusCode, _res.headers,chunk)
  			}
 			
 		  });
@@ -69,7 +71,7 @@ function connectionHandler(req, res) {
 		client.write(chunk);
 		if(hook_request!=null)
 		{
-			chunk=hook_request(tag,req.method,req.url,req.headers,chunk)
+			chunk=hook_request(ip,tag,req.method,req.url,req.headers,chunk)
 		}
 		//chunks.push(chunk)
 		
@@ -112,7 +114,7 @@ exports.start_server = function (_port,isCluster,_hook_request,_hook_respond) {
 	{
 	   // Workers can share any TCP connection
 	   // In this case it is an HTTP server
-		http.createServer(connectionHandler).listen(_port,function() {
+		return http.createServer(connectionHandler).listen(_port,function() {
 			console.log("now that "+VERSION+" is running:("+_port+")");
 		});
     }
