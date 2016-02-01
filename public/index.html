@@ -20,20 +20,9 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script><!--socket.io测试用可删除-->
 </head>
 <body  >
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+
   <script>
-    var socket = io();
-    $('form').submit(function(){
-      socket.emit('proxy', $('#m').val());
-      $('#m').val('');
-      return false;
-    });
-    socket.on('proxy', function(msg){
-       $('#messages').append($('<li>').text(msg));
-     });
+
   </script>
     <!--整体布局-->
     <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
@@ -44,8 +33,8 @@
             <ul class="uk-list  uk-list-line uk-list-space" style="margin-top: 5px" id="request_list" >
 
                 <script>
-                    request_netlist();
-//                    testlist();
+//                    request_netlist();
+request_netlist();
                 </script>
 
             </ul>
