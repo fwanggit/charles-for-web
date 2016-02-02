@@ -2,7 +2,7 @@
 
 
 var requestlist=[];
-//var netmsg = {"host":"www.baidu.com","url":"/haha","requestHeader":"a","responseHeader":"b","body":"hahaha"}
+//var netmsg = {"host":"www.baidu.com","url":"/haha","requestHeader":"a","responseHeader":"b","body":"hahaha","ip":"127.0.0.1","id":"123456"}
 //var hostmsg = {"host":"www.baidu.com","isshow":false,"netmsgs":[netmsg,netmsg]};
 
 var host=-1;
@@ -20,10 +20,51 @@ function request_netlist(){
 	socket.on('proxy', function(msg){
 		var json = $.parseJSON(msg);
 		if(json.request){
-			addrequest({"host":json.request.url,"url":"","requestHeader":json.request.headers,"responseHeader":"","body":""})
+			var url = json.request.url;
+			var fdStart = url.indexOf("http://");
+			if(fdStart == 0){
+				var endurl = url.split("http://")[1];
+				var host =  endurl.split("/")[0];
+				var theurl = endurl.split("/")[1];
+				if(!theurl){
+					theurl = "<UNKNOWN>";
+				}
+				var headers = json.request.headers;
+				headers = headers.substr(1,headers.length-2);
+				headers = $.parseJSON(headers);
+				var header = "";
+				for(var key in headers){
+
+					header+=key+":" + headers[key]+"<br>";
+				}
+
+
+				addrequest({"host":"http://"+host,"url":theurl,"requestHeader":header,
+					"responseHeader":"","body":"","id":json.id,"ip":json.ip})
+
+			}else if(fdStart == -1){
+
+			}
+
+        }else if(json.data){
+var has = false;
+			for(i=0;i<requestlist.length;i++){
+
+				for(j=0;j<requestlist[i].netmsgs.length;j++){
+					if(requestlist[i].netmsgs[j].id==json.id){
+						requestlist[i].netmsgs[j].body=json.data;
+						listrefresh();
+						has = true;
+						break;
+					}
+				}
+				if(has){
+					break;
+				}
+
+			}
 		}
 
-		//$('#messages').append($('<li>').text(msg));
 	});
 }
 
@@ -146,20 +187,7 @@ function loadHTMLDoc(url,id,end)
 
 
 
-function testlist(){
-	addrequest({"host":"www.baidu.com","url":"/abcdefg","requestHeader":"header1","responseHeader":"header1","body":"今天天气真不错"})
-	addrequest({"host":"www.sina.com","url":"/fdswer","requestHeader":"header2","responseHeader":"header2","body":"今天天气不好"})
-	addrequest({"host":"www.baidu.com","url":"/fdwerg","requestHeader":"header3","responseHeader":"header3","body":"流量平台部"})
-	addrequest({"host":"www.sina.com","url":"/gfderg","requestHeader":"header4","responseHeader":"header4","body":"深入理解java虚拟机"})
-	addrequest({"host":"www.baidu.com","url":"/fdswerg","requestHeader":"header5","responseHeader":"header5","body":"redi入门指南"})
-	addrequest({"host":"www.sina.com","url":"/fdsgdre","requestHeader":"header6","responseHeader":"header6","body":"html与js"})
-	addrequest({"host":"www.baidu.com","url":"/fdswerg","requestHeader":"header7","responseHeader":"header7","body":"MObisage研发部"})
-	addrequest({"host":"www.sina.com","url":"/fdswerg","requestHeader":"header8","responseHeader":"header8","body":"重要的事情要说三遍"})
-	addrequest({"host":"www.baidu.com","url":"/fdsewrg","requestHeader":"header9","responseHeader":"header9","body":"不要回答不要回答不要回答"})
-	addrequest({"host":"www.sina.com","url":"/fdsewrh","requestHeader":"header0","responseHeader":"header0","body":"道虽远,不行不至"})
-	addrequest({"host":"www.baidu.com","url":"/wertgdf","requestHeader":"header43","responseHeader":"header21","body":"事虽小,不为不成"})
-	addrequest({"host":"www.sina.com","url":"/bvcnhg","requestHeader":"header656","responseHeader":"header12","body":"好好学习,天天向上"})
-}
+
 
 function addrequest(netmsg){
 	var has = false;
@@ -213,16 +241,8 @@ url=postion;
 					break;
 			}
 	});
-
-
-
-
-
 		//点击一条信息,改变背景色
 			//document.getElementById('request_list__'+host+"_"+postion).style.backgroundColor="#6495ED";
-
-
-
 }
 
 function listrefresh(){
@@ -236,4 +256,9 @@ function listrefresh(){
 		}
 	}
 	document.getElementById('request_list').innerHTML=content;
+}
+
+function clearclick(){
+	requestlist.length=0;
+	listrefresh();
 }
