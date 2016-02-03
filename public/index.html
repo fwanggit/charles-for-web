@@ -29,7 +29,10 @@
 
         <!--左边栏-->
         <div id="left" class="uk-margin-right uk-overflow-container" role="group">
-            <button onclick="clearclick()">clear</button>
+            <button class="uk-button" type="button" onclick="clearclick()">clear</button>
+            <input type="text" placeholder="ip" style="width: 100px" id="ipfilter">
+            <input type="text" placeholder="domain" style="width: 140px" id="domainfilter">
+            <button class="uk-button" type="button" onclick="addRule()">rule</button>
             <!--网络请求列表-->
             <ul class="uk-list  uk-list-line uk-list-space" style="margin-top: 5px" id="request_list" >
 

@@ -11,7 +11,13 @@ var url=-1
 var inspector_request = 0;
 var inspector_response = 0;
 
+var ipfilter = "";
+var domainfilter = "";
 
+function addRule(){
+	ipfilter=$("#ipfilter").val();
+	domainfilter=$("#domainfilter").val();
+}
 
 function request_netlist(){
 	var socket = io();
@@ -67,7 +73,6 @@ var has = false;
 
 	});
 }
-
 
 
 function inspectors_checked(end){
