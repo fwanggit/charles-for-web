@@ -9,11 +9,7 @@
     <link rel="stylesheet" href="libs/uikit/css/uikit.min.css" />
     <script src="libs/jquery/jquery-1.11.3.min.js"></script>
     <script src="libs/uikit/js/uikit.min.js"></script>
-    <style type="text/css">
-    div#left {background-color:#ffffff; height:700px; width:380px; float:left;}
-    div#line {background-color:#000000; height:700px; width:1px; float:left;}
-    div#right {background-color:#ffffff; height:700px; width:700px; float:left;}
-    </style>
+
     <script src="scripts/index.js"></script>
     <script src="scripts/responder.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -21,14 +17,13 @@
 </head>
 <body  >
 
-  <script>
 
-  </script>
     <!--整体布局-->
-    <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-
+    <div class="uk-container uk-container-center uk-margin-top">
+<div class="uk-grid">
         <!--左边栏-->
-        <div id="left" class="uk-margin-right uk-overflow-container" role="group">
+        <div id="left" class="  uk-height-1-1 " style="width: 35%; " >
+
             <button class="uk-button" type="button" onclick="clearclick()">clear</button>
             <input type="text" placeholder="ip" style="width: 100px" id="ipfilter">
             <input type="text" placeholder="domain" style="width: 140px" id="domainfilter">
@@ -45,10 +40,10 @@ request_netlist();
 
         </div>
         <!--中间竖线-->
-        <div id = "line"></div>
+        <!--<div id = "line"></div>-->
 
         <!--右边整体布局-->
-        <div id = "right" class="uk-margin-left">
+        <div id = "right" class=" uk-width-medium-3-4 uk-height-1-1 " style="width: 65%;border-left-width: 1px;border-left-style: solid">
 
             <!--导航栏-->
             <nav class="uk-navbar uk-margin-bottom">
@@ -71,7 +66,7 @@ request_netlist();
             </div>
         </div>
 
-
+</div>
     </div>
 </div>
 </div>
