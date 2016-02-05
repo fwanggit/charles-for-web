@@ -25,28 +25,34 @@ function request_netlist(){
 	//$('#m').val('');
 	socket.on('proxy', function(msg){
 		var json = $.parseJSON(msg);
+		if(ipfilter!=""&&json.ip!=ipfilter){
+			return;
+		}
 		if(json.request){
 			var url = json.request.url;
 			var fdStart = url.indexOf("http://");
 			if(fdStart == 0){
 				var endurl = url.split("http://")[1];
 				var host =  endurl.split("/")[0];
-				var theurl = endurl.split("/")[1];
-				if(!theurl){
-					theurl = "<UNKNOWN>";
+				if(host.indexOf(domainfilter)>0){
+					var theurl = endurl.split("/")[1];
+					if(!theurl){
+						theurl = "<UNKNOWN>";
+					}
+					var headers = json.request.headers;
+					headers = headers.substr(1,headers.length-2);
+					headers = $.parseJSON(headers);
+					var header = "";
+					for(var key in headers){
+
+						header+=key+":" + headers[key]+"<br>";
+					}
+
+
+					addrequest({"host":"http://"+host,"url":theurl,"requestHeader":header,
+						"responseHeader":"","body":"","id":json.id,"ip":json.ip})
 				}
-				var headers = json.request.headers;
-				headers = headers.substr(1,headers.length-2);
-				headers = $.parseJSON(headers);
-				var header = "";
-				for(var key in headers){
 
-					header+=key+":" + headers[key]+"<br>";
-				}
-
-
-				addrequest({"host":"http://"+host,"url":theurl,"requestHeader":header,
-					"responseHeader":"","body":"","id":json.id,"ip":json.ip})
 
 			}else if(fdStart == -1){
 
