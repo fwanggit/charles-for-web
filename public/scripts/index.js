@@ -25,6 +25,7 @@ function request_netlist(){
 	//$('#m').val('');
 	socket.on('proxy', function(msg){
 		var json = $.parseJSON(msg);
+
 		if(ipfilter!=""&&json.ip!=ipfilter){
 			return;
 		}
@@ -34,7 +35,8 @@ function request_netlist(){
 			if(fdStart == 0){
 				var endurl = url.split("http://")[1];
 				var host =  endurl.split("/")[0];
-				if(host.indexOf(domainfilter)>0){
+				if(domainfilter==""||host.indexOf(domainfilter)>0){
+
 					var theurl = endurl.split("/")[1];
 					if(!theurl){
 						theurl = "<UNKNOWN>";
